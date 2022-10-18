@@ -19,6 +19,11 @@ void hacerPedido()
 
 void *worker(void *arg){
     int cos;
+    bool vis[8];
+    ciclo(i,8)
+    {
+        vis[i]=false;
+    }
     pedido destinos[5];
     pthread_mutex_lock( &mutex1 );
     ciclo(i,cos)
@@ -31,6 +36,11 @@ void *worker(void *arg){
     ciclo(i,cos)
     {
         int cas = destinos[i].getCasa();
+        while(cas!=6)
+        {
+            vis[cas]=true;
+            cas = parent[cas];
+        }
     }
 }
 int main()
