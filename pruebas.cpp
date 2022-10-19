@@ -95,7 +95,7 @@ int main()
             }
         }
         else{
-            pthread_join(thread1, NULL);
+            while(mt1==1 && mt2==1 && mt3==1){}
         }
     }
 }
