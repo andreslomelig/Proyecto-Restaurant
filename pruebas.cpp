@@ -1,74 +1,24 @@
 //Haz arder tu corazón 
 
-#include "bits2.h"
-#include "Arch.h"
-#include "Grafo.h"
-#include <pthread.h>
-#include<ctime>
+
+#include "Motos.h"
 
 using namespace std;
-pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t mutex2 = PTHREAD_MUTEX_INITIALIZER;
-
-int motos = 0;
-
-void delay(int secs) {
-  for(int i = (time(NULL) + secs); time(NULL) != i; time(NULL));
-}
 
 void hacerPedido()
 {
     string nom;
-    cout<<"Porfavor dijiete el nombre del archivo con terminacion .txt\n";
+    cout<<"Porfavor dijite el nombre del archivo con terminacion .txt\n";
     cin>>nom;
     lectura(nom);
 }
 
-void *worker(void *arg){
-    int cos=3;
-    int tiempo = 0;
-    bool vis[8];
-    ciclo(i,8)
-    {
-        vis[i]=false;
-    }
-    pedido destinos[5];
-    pthread_mutex_lock( &mutex1 );
-    ciclo(i,cos)
-    {
-        pedido act = pedidos.front();
-        destinos[i] = act;
-        pedidos.pop();
-    }
-    pthread_mutex_unlock( &mutex1 );
-    ciclo(i,cos)
-    {
-        int cas = destinos[i].getCasa();
-        if(!vis[cas])
-        {
-            tiempo = tiempo +padj[cas];
-            while(cas!=6)
-            {
-                if(vis[cas])
-                {
-                    tiempo = tiempo - padj[cas];
-                    break;
-                }
-                vis[cas]=true;
-                cas = parent[cas];
-            }
-        }
-    }
-    delay(tiempo);
-    cout<<tiempo<<"\n";
-    pthread_mutex_lock( &mutex2 );
-    motos--;
-    pthread_mutex_unlock( &mutex2 );
-}
 
 int main()
 {
     pthread_t thread1;
+    pthread_t thread2;
+    pthread_t thread3;
     graph g;
     int m = 5;
     bool directed = false;
@@ -104,12 +54,43 @@ int main()
             if(select==1)
             {
                 hacerPedido(); 
-                pthread_create(&thread1,NULL, &worker ,NULL );
-                motos++;                      
+                if(mt1==0)
+                {
+                    pthread_create(&thread1,NULL, &moto1 ,NULL );
+                    mt1=1;
+                    motos++;                      
+                }
+                else if(mt2==0)
+                {
+                    pthread_create(&thread2,NULL, &moto2 ,NULL );
+                    mt2=1;
+                    motos++;                      
+                }
+                else if(mt3==0)
+                {
+                    pthread_create(&thread3,NULL, &moto3 ,NULL );
+                    mt3=1;
+                    motos++;                      
+                }
+
             }
             else if(select==2)
             {
-                pthread_join(thread1, NULL);
+                if(mt1==1)
+                {
+                    cout<<"Esperando moto 1\n";
+                    pthread_join(thread1, NULL);
+                }
+                if(mt2==1)
+                {
+                    cout<<"Esperando moto 2\n";
+                    pthread_join(thread2, NULL);
+                }
+                if(mt3==1)
+                {
+                    cout<<"Esperando moto 3\n";
+                    pthread_join(thread3, NULL);
+                }
                 cout<<"Gran dia, los resultados se encuantran en el archivo resultados.txt";
             }
         }
