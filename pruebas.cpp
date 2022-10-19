@@ -1,13 +1,12 @@
 //Haz arder tu corazón 
 
-#include <pthread.h>
 #include "bits2.h"
 #include "Arch.h"
 #include "Grafo.h"
+#include <pthread.h>
 
+using namespace std;
 pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
-
-int motos = 0;
 
 void hacerPedido()
 {
@@ -18,7 +17,8 @@ void hacerPedido()
 }
 
 void *worker(void *arg){
-    int cos;
+    int cos=3;
+    int tiempo = 0;
     bool vis[8];
     ciclo(i,8)
     {
@@ -36,16 +36,28 @@ void *worker(void *arg){
     ciclo(i,cos)
     {
         int cas = destinos[i].getCasa();
-        while(cas!=6)
+        if(!vis[cas])
         {
-            vis[cas]=true;
-            cas = parent[cas];
+            tiempo = tiempo +padj[cas];
+            while(cas!=6)
+            {
+                if(vis[cas])
+                {
+                    tiempo = tiempo - padj[cas];
+                    break;
+                }
+                vis[cas]=true;
+                cas = parent[cas];
+            }
         }
     }
+    cout<<tiempo<<"\n";
+    
 }
+
 int main()
 {
-
+    pthread_t thread1;
     graph g;
     int m = 5;
     bool directed = false;
@@ -69,30 +81,29 @@ int main()
     {
         cout<<i<<" "<<parent[i]<<" ";
     }
+    cout<<"\n";
+    int select = 0;
 
-    int select=0;
     while(select!=2)
     {
-        if(motos!=3)
-        {
             cout<<"Selecione 1 para hacer un nuevo pedido\n";
-            cout<<"Seleciono 2 para cerrar el dia\n";
+            cout<<"Selecione 2 para cerrar el dia\n";
             cin>>select;
+
             if(select==1)
             {
                 hacerPedido(); 
-                if(pedidos.size()>=5)
-                {
+                pthread_create(&thread1,NULL, &worker ,NULL );
                     //hilo moto
+                   // pp();
                     //join
-                    motos++;
-                }                       
+                pthread_join(thread1, NULL);
+                    //motos++;                       
             }
             else if(select==2)
             {
                 cout<<"Gran dia, los resultados se encuantran en el archivo resultados.txt";
             }
-        }
         //join
     }
 }

@@ -8,6 +8,7 @@ int tiempo;
 bool processed[MAXV+1];
 bool discovered[MAXV+1];
 int parent[MAXV+1];
+map<int,int> padj;
 
 typedef struct edgenode{
     int y;
@@ -99,7 +100,9 @@ int dijkstra(graph *g, int start) {
         intree [v] = true;
         if (v != start) {
             cout<<parent[v]<<" "<<v<<" ";
+            cout<<dist<<"\n";
             weight = weight + dist;
+            padj[v]=dist;
         }
         p = g->edges[v];
         while (p != NULL) {
