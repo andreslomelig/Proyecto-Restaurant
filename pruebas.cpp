@@ -4,9 +4,17 @@
 #include "Arch.h"
 #include "Grafo.h"
 #include <pthread.h>
+#include<ctime>
 
 using namespace std;
 pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutex2 = PTHREAD_MUTEX_INITIALIZER;
+
+int motos = 0;
+
+void delay(int secs) {
+  for(int i = (time(NULL) + secs); time(NULL) != i; time(NULL));
+}
 
 void hacerPedido()
 {
@@ -51,8 +59,11 @@ void *worker(void *arg){
             }
         }
     }
+    delay(tiempo);
     cout<<tiempo<<"\n";
-    
+    pthread_mutex_lock( &mutex2 );
+    motos--;
+    pthread_mutex_unlock( &mutex2 );
 }
 
 int main()
@@ -85,7 +96,7 @@ int main()
     int select = 0;
 
     while(select!=2)
-    {
+    {   if(motos!=3){
             cout<<"Selecione 1 para hacer un nuevo pedido\n";
             cout<<"Selecione 2 para cerrar el dia\n";
             cin>>select;
@@ -94,17 +105,17 @@ int main()
             {
                 hacerPedido(); 
                 pthread_create(&thread1,NULL, &worker ,NULL );
-                    //hilo moto
-                   // pp();
-                    //join
-                pthread_join(thread1, NULL);
-                    //motos++;                       
+                motos++;                      
             }
             else if(select==2)
             {
+                pthread_join(thread1, NULL);
                 cout<<"Gran dia, los resultados se encuantran en el archivo resultados.txt";
             }
-        //join
+        }
+        else{
+            pthread_join(thread1, NULL);
+        }
     }
 }
 
