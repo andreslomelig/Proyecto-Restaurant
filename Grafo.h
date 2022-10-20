@@ -25,7 +25,6 @@ typedef struct {
 }graph;
 
 void initialize_graph (graph *g, bool directed) {
-    cout<<"ini\n";
     g->nvertices = 0;
     g->nedges = 0;
     g->directed = directed;
@@ -39,7 +38,6 @@ void initialize_graph (graph *g, bool directed) {
 
 void insert_edge (graph *g, int x, int y,int _weight ,bool directed) {
     edgenode *p = new edgenode;
-    cout<<x<<" "<<y<<"\n";
     p->weight = _weight;
     p->y = y;
     p->next = g->edges[x];
@@ -99,8 +97,6 @@ int dijkstra(graph *g, int start) {
     while (!intree[v]) {
         intree [v] = true;
         if (v != start) {
-            cout<<parent[v]<<" "<<v<<" ";
-            cout<<dist<<"\n";
             weight = weight + dist;
             padj[v]=dist;
         }
@@ -120,7 +116,6 @@ int dijkstra(graph *g, int start) {
                 v = i;
             }
         }
-        cout<<"\n";
     }
     return(weight);
 }
