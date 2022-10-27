@@ -25,6 +25,11 @@ int main()
 
     initialize_graph(&g, directed);
 
+    ciclo(i,50)
+    {
+        
+    }
+
     insert_edge(&g,6,1,10,directed);
     insert_edge(&g,6,5,25,directed);
     insert_edge(&g,5,7,24,directed);
