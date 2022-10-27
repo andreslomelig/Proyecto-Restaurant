@@ -19,6 +19,26 @@ void delay(int secs) {
   for(int i = (time(NULL) + secs); time(NULL) != i; time(NULL));
 }
 
+void estadoM()
+{
+    if(mt1==0) cout<<"Moto 1 estado: Esperando\n";
+    else cout<<"Moto 1 estado: En entrega\n";
+
+    if(mt2==0) cout<<"Moto 2 estado: Esperando\n";
+    else cout<<"Moto 2 estado: En entrega\n";
+
+    if(mt3==0) cout<<"Moto 3 estado: Esperando\n";
+    else cout<<"Moto 3 estado: En entrega\n";  
+    cout<<"--------------------------------------------------\n";
+    cout<<"\n"; 
+}
+
+void Pregunt()
+{
+    cout<<"Selecione 1 para hacer un nuevo pedido\n";
+    cout<<"Selecione 2 para cerrar el dia\n";
+}
+
 void *moto1(void *arg){
     int cos=3;
     int tiempo = 0;
@@ -61,6 +81,9 @@ void *moto1(void *arg){
     motos--;
     mt1=0;
     pthread_mutex_unlock( &mutex2 );
+    system("cls");
+    estadoM();
+    Pregunt();
 }
 
 void *moto2(void *arg){
@@ -99,12 +122,13 @@ void *moto2(void *arg){
         }
     }
     delay(tiempo);
-    cout<<tiempo<<"\n";
-    cout<<"Pedidos moto 2 entregados\n";
     pthread_mutex_lock( &mutex2 );
     motos--;
     mt2=0;
     pthread_mutex_unlock( &mutex2 );
+    system("cls");
+    estadoM();
+    Pregunt();
 }
 
 void *moto3(void *arg){
@@ -149,4 +173,7 @@ void *moto3(void *arg){
     motos--;
     mt3=0;
     pthread_mutex_unlock( &mutex2 );
+    system("cls");
+    estadoM();
+    Pregunt();
 }

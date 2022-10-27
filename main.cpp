@@ -5,6 +5,11 @@
 
 using namespace std;
 
+void clearConsole(){
+    system("pause");
+    system("cls");
+}
+
 void hacerPedido()
 {
     string nom;
@@ -39,10 +44,9 @@ int main()
 
     while(select!=2)
     {   if(motos!=3){
-            cout<<"Selecione 1 para hacer un nuevo pedido\n";
-            cout<<"Selecione 2 para cerrar el dia\n";
+            estadoM();
+            Pregunt();
             cin>>select;
-
             if(select==1)
             {
                 hacerPedido(); 
@@ -64,7 +68,7 @@ int main()
                     mt3=1;
                     motos++;                      
                 }
-
+                clearConsole();
             }
             else if(select==2)
             {
@@ -87,7 +91,9 @@ int main()
             }
         }
         else{
+            cout<<"Motos en pedidos favor de esperar";
             while(mt1==1 && mt2==1 && mt3==1){}
+            clearConsole();
         }
     }    
 }
